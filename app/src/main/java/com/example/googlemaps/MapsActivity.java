@@ -6,12 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,10 +39,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //初期位置、カメラ
+        //初期位置、カメラ、初期設定
         mMap = googleMap;
         LatLng start_location = new LatLng(35.1349, 136.9758);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,17));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
 
         //DBのマーカーを全部設置
         new SetAllMarker(this).execute();
@@ -58,20 +55,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onMarkerClick(Marker marker) {
                 marker.showInfoWindow();
                 return false;
-            }
-        });
-
-        //情報ウィンドウ表示時
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoContents(Marker marker) {
-                View view = getLayoutInflater().inflate(R.layout.info_window, null);
-                //タイトルとか追加。ココで座標からのオブジェクト取得やってタイトルとか追加
-                return view;
-            }
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
             }
         });
 
@@ -146,7 +129,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             for (MarkerData m:markerList){
                 LatLng position = new LatLng(m.getLatitude(), m.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(position));
+                mMap.addMarker(new MarkerOptions().position(position).title(m.getTitle()).snippet(m.getTag()));
             }
         }
     }

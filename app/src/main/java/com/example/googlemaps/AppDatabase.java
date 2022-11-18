@@ -4,8 +4,7 @@ import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(
-        entities = {MarkerData.class},version = 4, exportSchema = false)
+@Database(entities = {MarkerData.class},version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MarkerDataDao markerDataDao();
 }
