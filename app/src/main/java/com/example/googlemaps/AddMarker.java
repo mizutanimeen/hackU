@@ -25,10 +25,10 @@ public class AddMarker extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addmarker);
 
-        Button saveBtn = findViewById(R.id.saveBtn);
-        AppDatabase db = AppDatabaseSingleton.getInstance(getApplicationContext());
 
-        saveBtn.setOnClickListener(new AddMarkerButton(db,this));
+        AppDatabase db = AppDatabaseSingleton.getInstance(getApplicationContext());
+        Button createBtn = findViewById(R.id.createBtn);
+        createBtn.setOnClickListener(new AddMarkerButton(db,this));
 
         //プルダウン
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -37,6 +37,9 @@ public class AddMarker extends AppCompatActivity {
         adapter.add("注意");
         adapter.add("緊急・危険");
         ((Spinner) findViewById(R.id.tag)).setAdapter(adapter);
+
+        Button returnBtn = findViewById(R.id.returnBtn);
+        returnBtn.setOnClickListener(new MoveMapsPage());
     }
 
     private class AddMarkerButton implements View.OnClickListener {
@@ -101,6 +104,13 @@ public class AddMarker extends AppCompatActivity {
                 startActivity(intent);
             }
         }
+    }
 
+    private class MoveMapsPage implements View.OnClickListener{
+        @Override
+        public void onClick(View view){
+            Intent intent = new Intent(getApplication(), MapsActivity.class);
+            startActivity(intent);
+        }
     }
 }

@@ -12,6 +12,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,7 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //初期位置、カメラ、初期設定
         mMap = googleMap;
         LatLng start_location = new LatLng(35.1349, 136.9758);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,17));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,15));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
@@ -115,7 +116,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected Integer doInBackground(Void... params) {
-
             MarkerDataDao markerDao = db.markerDataDao();
             markerList = markerDao.getAllMarkerData();
             return 0;
@@ -128,8 +128,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
             for (MarkerData m:markerList){
+                float color = 0;
+                switch (m.getTag()) {
+                    // HUE_AZURE HUE_BLUE HUE_CYAN HUE_GREEN HUE_MAZENTA HUE_ORANGE HUE_RED HUE_ROSE HUE_VIOLET HUE_YELLOW
+                    case "安全":
+                        color = BitmapDescriptorFactory.HUE_BLUE;
+                        break;
+                    case"注意":
+                        color = BitmapDescriptorFactory.HUE_ORANGE;
+                        break;
+                    case"緊急・危険":
+                        color = BitmapDescriptorFactory.HUE_RED;
+                        break;
+                    default:
+                        color = BitmapDescriptorFactory.HUE_BLUE;
+                }
                 LatLng position = new LatLng(m.getLatitude(), m.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(position).title(m.getTitle()).snippet(m.getTag()));
+                mMap.addMarker(new MarkerOptions().position(position).title(m.getTitle()).snippet(m.getText())
+                        .icon(BitmapDescriptorFactory.defaultMarker(color)));
             }
         }
     }
