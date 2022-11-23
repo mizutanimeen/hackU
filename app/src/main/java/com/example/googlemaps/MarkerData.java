@@ -19,6 +19,7 @@ public class MarkerData {
     private String text;
     private String tag;
     private String createTime;
+    private String comment;
 
     public MarkerData(double latitude,double longitude,String title,String text,String tag,String createTime) {
         this.latitude = latitude;
@@ -27,6 +28,7 @@ public class MarkerData {
         this.text = text;
         this.tag = tag;
         this.createTime = createTime;
+        this.comment = "";
     }
 
     public void setId(int id){this.id = id;}
@@ -47,4 +49,6 @@ public class MarkerData {
     public String getCreateTime() {return createTime;}
     public void setTag(String tag) {this.tag = tag;}
     public String getTag() {return tag;}
+    public void setComment(String comment) {this.comment = comment;}
+    public String getComment(){return comment;}
 }

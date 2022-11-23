@@ -13,7 +13,7 @@ public class AppDatabaseSingleton {
             return instance;
         }
         instance = Room.databaseBuilder(context, AppDatabase.class,
-                "app_database").fallbackToDestructiveMigration().build();
+                "data").fallbackToDestructiveMigration().build();
         return instance;
     }
 }
