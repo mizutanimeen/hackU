@@ -42,8 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         //初期位置、カメラ、初期設定
         mMap = googleMap;
-        LatLng start_location = new LatLng(0, 0);
-//        LatLng start_location = new LatLng(35.1349, 136.9758);
+        LatLng start_location = new LatLng(35.1349, 136.9758);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,15));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);

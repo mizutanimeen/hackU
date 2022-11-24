@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.View;
@@ -14,21 +15,45 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.googlemaps.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class AddMarker extends AppCompatActivity {
+public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
+
+    //地図用
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addmarker);
 
+        //地図用
+        setContentView(R.layout.activity_addmarker);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        //初期位置、カメラ、初期設定
+        mMap = googleMap;
+        LatLng start_location = new LatLng(35.1349, 136.9758);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,15));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
 
         AppDatabase db = AppDatabaseSingleton.getInstance(getApplicationContext());
         Button createBtn = findViewById(R.id.createBtn);
-        createBtn.setOnClickListener(new AddMarkerButton(db,this));
+        createBtn.setOnClickListener(new AddMarkerButton(db,this,mMap));
 
         //プルダウン
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -45,25 +70,26 @@ public class AddMarker extends AppCompatActivity {
     private class AddMarkerButton implements View.OnClickListener {
         private AppDatabase db;
         private Activity activity;
+        private GoogleMap mMap;
 
-        private AddMarkerButton(AppDatabase db,Activity activity) {
+        private AddMarkerButton(AppDatabase db,Activity activity,GoogleMap mMap) {
             this.db = db;
             this.activity = activity;
+            this.mMap = mMap;
         }
 
         @Override
         public void onClick(View view) {
-            EditText latitudeEdit = findViewById(R.id.latitude);
-            EditText longitudeEdit = findViewById(R.id.longitude);
-            double latitude = Float.parseFloat(latitudeEdit.getText().toString());
-            double longitude = Float.parseFloat(longitudeEdit.getText().toString());
             String title = ((EditText)findViewById(R.id.title)).getText().toString();
             String text = ((EditText)findViewById(R.id.text)).getText().toString();
             String tag = (String)((Spinner)findViewById(R.id.tag)).getSelectedItem();
 
+            LatLng point = mMap.getCameraPosition().target;
+            double latitude = point.latitude;
+            double longitude = point.longitude;
+
             new CreateMarker(db,activity, latitude,longitude,title,text,tag).execute();
         }
-
 
         private class CreateMarker extends AsyncTask<Void, Void, Integer> {
             private WeakReference<Activity> weakActivity;
