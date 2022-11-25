@@ -2,6 +2,8 @@ package com.example.googlemaps;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.googlemaps.databinding.ActivityMapsBinding;
@@ -22,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
 import java.util.List;
@@ -81,13 +85,13 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
         @Override
         public void onClick(View view) {
             String title = ((EditText)findViewById(R.id.title)).getText().toString();
+            if (title.equals("")){return;}
             String text = ((EditText)findViewById(R.id.text)).getText().toString();
             String tag = (String)((Spinner)findViewById(R.id.tag)).getSelectedItem();
 
             LatLng point = mMap.getCameraPosition().target;
             double latitude = point.latitude;
             double longitude = point.longitude;
-
             new CreateMarker(db,activity, latitude,longitude,title,text,tag).execute();
         }
 
@@ -101,8 +105,8 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
             private String tag;
 
 
-            public CreateMarker(AppDatabase db, Activity activity,double latitude ,
-                                double longitude,String title,String text,String tag) {
+            public CreateMarker(AppDatabase db, Activity activity, double latitude,
+                                double longitude, String title, String text, String tag) {
                 this.db = db;
                 weakActivity = new WeakReference<>(activity);
                 this.latitude = latitude;
@@ -115,7 +119,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
             @Override
             protected Integer doInBackground(Void... params) {
                 MarkerDataDao markerDao = db.markerDataDao();
-                markerDao.markerInsert(new MarkerData(latitude,longitude,title,text,tag,
+                markerDao.markerInsert(new MarkerData(latitude, longitude, title, text, tag,
                         new Timestamp(System.currentTimeMillis()).toString()));
                 return 0;
             }
@@ -123,7 +127,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
             @Override
             protected void onPostExecute(Integer code) {
                 Activity activity = weakActivity.get();
-                if(activity == null) {
+                if (activity == null) {
                     return;
                 }
                 Intent intent = new Intent(getApplication(), MapsActivity.class);
