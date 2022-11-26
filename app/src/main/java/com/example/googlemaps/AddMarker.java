@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -25,6 +28,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
@@ -34,6 +40,10 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
 
     //地図用
     private GoogleMap mMap;
+
+    private static final int RESULT_PICK_IMAGEFILE = 1000;
+    private ImageView imageView;
+    private String imagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,46 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
 
         Button returnBtn = findViewById(R.id.returnBtn);
         returnBtn.setOnClickListener(new MoveMapsPage());
+
+        //画像追加用
+        imageView = (ImageView)findViewById(R.id.image_view);
+        findViewById(R.id.imageBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, RESULT_PICK_IMAGEFILE);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == RESULT_PICK_IMAGEFILE && resultCode == RESULT_OK) {
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                imagePath = uri.toString();
+
+                try {
+                    Bitmap bmp = getBitmapFromUri(uri);
+                    imageView.setImageBitmap(bmp);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
     }
 
     private class AddMarkerButton implements View.OnClickListener {
@@ -120,7 +170,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
             protected Integer doInBackground(Void... params) {
                 MarkerDataDao markerDao = db.markerDataDao();
                 markerDao.markerInsert(new MarkerData(latitude, longitude, title, text, tag,
-                        new Timestamp(System.currentTimeMillis()).toString()));
+                        new Timestamp(System.currentTimeMillis()).toString(),imagePath));
                 return 0;
             }
 
