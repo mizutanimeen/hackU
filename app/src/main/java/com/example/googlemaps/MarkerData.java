@@ -1,5 +1,6 @@
 package com.example.googlemaps;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import androidx.room.Entity;
@@ -22,9 +23,9 @@ public class MarkerData {
     private String tag;
     private String createTime;
     private String comment;
-    private String imagePath;
+    private String imageBitmap;
 
-    public MarkerData(double latitude,double longitude,String title,String text,String tag,String createTime,String imagePath) {
+    public MarkerData(double latitude,double longitude,String title,String text,String tag,String createTime,String imageBitmap) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.title = title;
@@ -32,7 +33,7 @@ public class MarkerData {
         this.tag = tag;
         this.createTime = createTime;
         this.comment = "";
-        this.imagePath = imagePath;
+        this.imageBitmap = imageBitmap;
     }
 
     public void setId(int id){this.id = id;}
@@ -55,6 +56,6 @@ public class MarkerData {
     public String getTag() {return tag;}
     public void setComment(String comment) {this.comment = comment;}
     public String getComment(){return comment;}
-    public void setImagePath(String imagePath){this.imagePath = imagePath;}
-    public String getImagePath(){return imagePath;}
+    public void setImageBitmap(String imageBitmap){this.imageBitmap = imageBitmap;}
+    public String getImageBitmap(){return imageBitmap;}
 }

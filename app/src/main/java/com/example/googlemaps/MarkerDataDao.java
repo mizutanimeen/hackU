@@ -7,6 +7,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.google.android.gms.maps.model.Marker;
+
 @Dao
 public interface MarkerDataDao {
     @Query("SELECT * FROM markerdata")
@@ -18,6 +20,6 @@ public interface MarkerDataDao {
     @Insert
     void markerInsert(MarkerData markerdata);
 
-    @Query("Delete From markerdata")
-    void allDelete();
+    @Query("SELECT * FROM markerdata WHERE id = :id")
+    MarkerData getMarkerDataById(int id);
 }
