@@ -7,36 +7,26 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-
-import android.os.ParcelFileDescriptor;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-
-import com.example.googlemaps.databinding.ActivityMapsBinding;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import android.widget.Toast;
+import android.annotation.SuppressLint;
+import androidx.fragment.app.FragmentActivity;
+import android.view.View;
+import android.os.ParcelFileDescriptor;
+import android.util.Base64;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
-import java.util.List;
 
 public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
 
@@ -57,6 +47,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //初期位置、カメラ、初期設定
@@ -65,6 +56,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,15));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
+//        mMap.setMyLocationEnabled(true);
 
         AppDatabase db = AppDatabaseSingleton.getInstance(getApplicationContext());
         Button createBtn = findViewById(R.id.createBtn);
@@ -143,7 +135,10 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
         @Override
         public void onClick(View view) {
             String title = ((EditText)findViewById(R.id.title)).getText().toString();
-            if (title.equals("")){return;}
+            if (title.equals("")){
+                Toast.makeText(getApplicationContext(), "need a title", Toast.LENGTH_LONG).show();
+                return;
+            }
             String text = ((EditText)findViewById(R.id.text)).getText().toString();
             String tag = (String)((Spinner)findViewById(R.id.tag)).getSelectedItem();
 

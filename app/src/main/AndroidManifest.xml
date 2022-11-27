@@ -30,5 +30,6 @@
         <activity android:name=".AddMarker"/>
         <activity android:name=".DetailMarker" />
     </application>
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 </manifest>
