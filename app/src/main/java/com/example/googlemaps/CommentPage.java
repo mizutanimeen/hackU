@@ -56,6 +56,39 @@ public class CommentPage  extends AppCompatActivity {
         }
     }
 
+    private class addComment extends AsyncTask<Void, Void, Integer> {
+        private WeakReference<Activity> weakActivity;
+        private AppDatabase db;
+        private int markerId;
+        private MarkerData markerData;
+        private String comment;
+
+        public addComment(Activity activity,int markerId,String comment) {
+            this.db = AppDatabaseSingleton.getInstance(getApplicationContext());
+            weakActivity = new WeakReference<>(activity);
+            this.markerId = markerId;
+            this.comment = comment;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            MarkerDataDao markerDao = db.markerDataDao();
+            markerData = markerDao.getMarkerDataById(markerId);
+            System.out.println("コメントを追加");
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            Activity activity = weakActivity.get();
+            if(activity == null) {
+                return;
+            }
+            System.out.println("コメントを再表示");
+        }
+    }
+
+
     private class moveDetailPage implements View.OnClickListener{
         @Override
         public void onClick(View view){

@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.google.android.gms.maps.model.Marker;
 
@@ -22,4 +23,7 @@ public interface MarkerDataDao {
 
     @Query("SELECT * FROM markerdata WHERE id = :id")
     MarkerData getMarkerDataById(int id);
+
+    @Update
+    void updateMarker(MarkerData markerdata);
 }
