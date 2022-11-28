@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import java.lang.ref.WeakReference;
 public class DetailMarker extends AppCompatActivity {
 
     private ImageView imageView;
+    private int markerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,14 @@ public class DetailMarker extends AppCompatActivity {
         setContentView(R.layout.activity_detailmarker);
 
         Intent intent = getIntent();
-        int markerId = intent.getIntExtra("MARKER_ID", 0);
+        markerId = intent.getIntExtra("MARKER_ID", 0);
+
+        Button commentBtn = findViewById(R.id.commentBtn);
+        commentBtn.setOnClickListener(new moveCommentPage());
+
+        Button returnBtn = findViewById(R.id.returnBtn);
+        returnBtn.setOnClickListener(new MoveMapsPage());
+
         imageView = findViewById(R.id.imageView);
         new ShowMarkerData(this,markerId).execute();
     }
@@ -76,6 +85,22 @@ public class DetailMarker extends AppCompatActivity {
         } catch (Exception e) {
             e.getMessage();
             return null;
+        }
+    }
+
+    private class moveCommentPage implements View.OnClickListener{
+        @Override
+        public void onClick(View view){
+            Intent intent2 = new Intent(getApplication(), CommentPage.class);
+            intent2.putExtra("MARKER_ID", markerId);
+            startActivity(intent2);
+        }
+    }
+    private class MoveMapsPage implements View.OnClickListener{
+        @Override
+        public void onClick(View view){
+            Intent intent = new Intent(getApplication(), MapsActivity.class);
+            startActivity(intent);
         }
     }
 }
