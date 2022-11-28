@@ -20,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toolbar;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import java.io.ByteArrayOutputStream;
@@ -65,7 +67,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
         //プルダウン
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapter.add("安全");
+        adapter.add("提案");
         adapter.add("注意");
         adapter.add("緊急・危険");
         ((Spinner) findViewById(R.id.tag)).setAdapter(adapter);

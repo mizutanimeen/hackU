@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,12 +26,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.googlemaps.databinding.ActivityMapsBinding;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+
+    private List<Marker> markerArray1 = new ArrayList<Marker>();
+    private List<Marker> markerArray2 = new ArrayList<Marker>();
+    private List<Marker> markerArray3 = new ArrayList<Marker>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,30 +141,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(activity == null) {
                 return;
             }
+            Marker marker;
             for (MarkerData m:markerList){
-                float color = 0;
+                LatLng position = new LatLng(m.getLatitude(), m.getLongitude());
                 switch (m.getTag()) {
                     // HUE_AZURE HUE_BLUE HUE_CYAN HUE_GREEN HUE_MAZENTA HUE_ORANGE HUE_RED HUE_ROSE HUE_VIOLET HUE_YELLOW
-                    case "安全":
-                        color = BitmapDescriptorFactory.HUE_BLUE;
-                        break;
                     case"注意":
-                        color = BitmapDescriptorFactory.HUE_ORANGE;
+                        marker = mMap.addMarker(new MarkerOptions().position(position).title(m.getTitle()).snippet(m.getText())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                        markerArray2.add(marker);
                         break;
                     case"緊急・危険":
-                        color = BitmapDescriptorFactory.HUE_RED;
+                        marker = mMap.addMarker(new MarkerOptions().position(position).title(m.getTitle()).snippet(m.getText())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        markerArray3.add(marker);
                         break;
-                    default:
-                        color = BitmapDescriptorFactory.HUE_BLUE;
+                    default://提案含む
+                        marker = mMap.addMarker(new MarkerOptions().position(position).title(m.getTitle()).snippet(m.getText())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        markerArray1.add(marker);
                 }
-                LatLng position = new LatLng(m.getLatitude(), m.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(position).title(m.getTitle()).snippet(m.getText())
-                        .icon(BitmapDescriptorFactory.defaultMarker(color)));
             }
         }
     }
 
-    public void moveAddPage(View view){
+    public void filterMarker(View v){
+        CheckBox checkBox1 = (CheckBox)findViewById(R.id.checkBox1);
+        for(Marker m:markerArray1){
+            m.setVisible(false);
+        }
+        for(Marker m:markerArray2){
+            m.setVisible(false);
+        }
+        for(Marker m:markerArray3){
+            m.setVisible(false);
+        }
+        if(checkBox1.isChecked()){
+            for(Marker m:markerArray1){
+                m.setVisible(true);
+            }
+        }
+        CheckBox checkBox2 = (CheckBox)findViewById(R.id.checkBox2);
+        if(checkBox2.isChecked()){
+            for(Marker m:markerArray2){
+                m.setVisible(true);
+            }
+        }
+        CheckBox checkBox3 = (CheckBox)findViewById(R.id.checkBox3);
+        if(checkBox3.isChecked()){
+            for(Marker m:markerArray3){
+                m.setVisible(true);
+            }
+        }
+    }
+
+    public void moveAddPage(View v){
         Intent intent = new Intent(getApplication(), AddMarker.class);
         startActivity(intent);
     }
