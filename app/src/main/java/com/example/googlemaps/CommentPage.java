@@ -5,21 +5,29 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentPage  extends AppCompatActivity {
 
     private int markerId;
 
+    static List<String> dataList = new ArrayList<String>();
+    static ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commentpage);
-
+        dataList = new ArrayList<String>();
         Intent intent = getIntent();
         markerId = intent.getIntExtra("MARKER_ID", 0);
         Button returnBtn = findViewById(R.id.returnBtn);
@@ -52,8 +60,37 @@ public class CommentPage  extends AppCompatActivity {
             if(activity == null) {
                 return;
             }
-            System.out.println("ok" + markerData.getComment());
+            ListView listView = findViewById(R.id.listView1);
+
+            adapter = new ArrayAdapter<String>(
+                    CommentPage.this,
+                    android.R.layout.simple_list_item_1,
+                    dataList);
+            listView.setAdapter(adapter);
+            String a = markerData.getComment();
+            System.out.println(a);
+            String a4 = "";
+            for(int i=0; i<a.length(); i++) {
+                String a2 = String.valueOf(a.charAt(i));
+                String a3 = ",";
+                if (!a2.equals(a3)) {
+                    a4 = a4.concat(a2);
+
+                } else {
+                    adapter.add(a4);
+                    a4 = "";
+                }
+            }
+            adapter.add(a4);
         }
+    }
+
+    public void addCommentSetup(View v){
+        EditText comment1 = (EditText)findViewById(R.id.comment1);
+        String text = comment1.getText().toString();
+        comment1.setText("");
+        adapter.add(text);
+        new addComment(CommentPage.this,markerId,text).execute();
     }
 
     private class addComment extends AsyncTask<Void, Void, Integer> {
@@ -61,20 +98,26 @@ public class CommentPage  extends AppCompatActivity {
         private AppDatabase db;
         private int markerId;
         private MarkerData markerData;
-        private String comment;
+        private String text;
 
-        public addComment(Activity activity,int markerId,String comment) {
+        public addComment(Activity activity,int markerId,String text) {
             this.db = AppDatabaseSingleton.getInstance(getApplicationContext());
             weakActivity = new WeakReference<>(activity);
             this.markerId = markerId;
-            this.comment = comment;
+            this.text = text;
         }
 
         @Override
         protected Integer doInBackground(Void... params) {
             MarkerDataDao markerDao = db.markerDataDao();
             markerData = markerDao.getMarkerDataById(markerId);
-            System.out.println("コメントを追加");
+            if (markerData.getComment().equals("")){
+                markerData.setComment(markerData.getComment().concat(text));
+            }
+            else {
+                markerData.setComment(markerData.getComment().concat(",".concat(text)));
+            }
+            markerDao.updateMarker(markerData);
             return 0;
         }
 
@@ -84,7 +127,6 @@ public class CommentPage  extends AppCompatActivity {
             if(activity == null) {
                 return;
             }
-            System.out.println("コメントを再表示");
         }
     }
 
