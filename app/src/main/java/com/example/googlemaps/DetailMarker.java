@@ -35,6 +35,15 @@ public class DetailMarker extends AppCompatActivity {
         int markerId = intent.getIntExtra("MARKER_ID", 0);
         imageView = findViewById(R.id.imageView);
         new ShowMarkerData(this,markerId).execute();
+
+        findViewById(R.id.commentBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), Comment.class);
+                intent.putExtra("MARKER_ID", markerId);
+                startActivity(intent);
+            }
+        });
     }
 
     private class ShowMarkerData extends AsyncTask<Void, Void, Integer> {
@@ -78,4 +87,5 @@ public class DetailMarker extends AppCompatActivity {
             return null;
         }
     }
+
 }

@@ -139,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 float color = 0;
                 switch (m.getTag()) {
                     // HUE_AZURE HUE_BLUE HUE_CYAN HUE_GREEN HUE_MAZENTA HUE_ORANGE HUE_RED HUE_ROSE HUE_VIOLET HUE_YELLOW
-                    case "安全":
+                    case "提案":
                         color = BitmapDescriptorFactory.HUE_BLUE;
                         break;
                     case"注意":
