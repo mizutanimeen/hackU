@@ -83,6 +83,10 @@ public class DetailMarker extends AppCompatActivity {
                 imageBitmap = StringToBitMap(noimage);
             }
             imageView.setImageBitmap(imageBitmap);
+
+            //text
+            TextView text = findViewById(R.id.text);
+            text.setText(markerData.getText());
         }
     }
 
