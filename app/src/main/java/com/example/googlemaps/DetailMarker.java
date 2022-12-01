@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class DetailMarker extends AppCompatActivity {
         Button commentBtn = findViewById(R.id.commentBtn);
         commentBtn.setOnClickListener(new moveCommentPage());
 
-        Button returnBtn = findViewById(R.id.returnBtn);
+        ImageButton returnBtn = findViewById(R.id.returnBtn);
         returnBtn.setOnClickListener(new MoveMapsPage());
 
         imageView = findViewById(R.id.imageView);

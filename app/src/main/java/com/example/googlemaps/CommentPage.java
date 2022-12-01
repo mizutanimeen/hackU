@@ -9,25 +9,28 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommentPage  extends AppCompatActivity {
 
     private int markerId;
 
-    static List<String> dataList = new ArrayList<String>();
-    static ArrayAdapter<String> adapter;
+    static ArrayList<Map<String,String>> dataList = new ArrayList<>();
+    static SimpleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commentpage);
-        dataList = new ArrayList<String>();
+        dataList = new ArrayList<>();
         Intent intent = getIntent();
         markerId = intent.getIntExtra("MARKER_ID", 0);
         Button returnBtn = findViewById(R.id.returnBtn);
@@ -60,28 +63,39 @@ public class CommentPage  extends AppCompatActivity {
             if(activity == null) {
                 return;
             }
-            ListView listView = findViewById(R.id.listView1);
-
-            adapter = new ArrayAdapter<String>(
-                    CommentPage.this,
-                    android.R.layout.simple_list_item_1,
-                    dataList);
-            listView.setAdapter(adapter);
             String a = markerData.getComment();
-            System.out.println(a);
             String a4 = "";
             for(int i=0; i<a.length(); i++) {
+                Map<String,String> item = new HashMap<>();
                 String a2 = String.valueOf(a.charAt(i));
                 String a3 = ",";
                 if (!a2.equals(a3)) {
                     a4 = a4.concat(a2);
 
                 } else {
-                    adapter.add(a4);
+                    item.put("comment",a4);
+                    item.put("user","ユーザー１");
+                    System.out.println(item);
+                    dataList.add(item);
+                    System.out.println(dataList);
                     a4 = "";
                 }
             }
-            adapter.add(a4);
+            if(a4 != ""){
+                Map<String,String> item = new HashMap<>();
+                item.put("comment",a4);
+                item.put("user","ユーザー１");
+                dataList.add(item);
+            }
+            System.out.println(dataList);
+            ListView listView = findViewById(R.id.listView1);
+            adapter = new SimpleAdapter(
+                    CommentPage.this,
+                    dataList,
+                    android.R.layout.simple_list_item_2,
+                    new String[] {"comment", "user"},
+            new int[]{android.R.id.text1,android.R.id.text2});
+            listView.setAdapter(adapter);
         }
     }
 
@@ -89,7 +103,11 @@ public class CommentPage  extends AppCompatActivity {
         EditText comment1 = (EditText)findViewById(R.id.comment1);
         String text = comment1.getText().toString();
         comment1.setText("");
-        adapter.add(text);
+        Map<String,String> item = new HashMap<>();
+        item.put("comment",text);
+        item.put("user","ユーザー１");
+        dataList.add(item);
+        adapter.notifyDataSetChanged();
         new addComment(CommentPage.this,markerId,text).execute();
     }
 

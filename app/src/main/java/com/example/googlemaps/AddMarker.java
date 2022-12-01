@@ -10,6 +10,8 @@ import android.os.Bundle;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.annotation.SuppressLint;
 import androidx.fragment.app.FragmentActivity;
@@ -72,7 +74,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
         adapter.add("緊急・危険");
         ((Spinner) findViewById(R.id.tag)).setAdapter(adapter);
 
-        Button returnBtn = findViewById(R.id.returnBtn);
+        ImageButton returnBtn = findViewById(R.id.returnBtn);
         returnBtn.setOnClickListener(new MoveMapsPage());
 
         //uri用
