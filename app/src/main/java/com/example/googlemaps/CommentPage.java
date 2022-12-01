@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -33,7 +34,7 @@ public class CommentPage  extends AppCompatActivity {
         dataList = new ArrayList<>();
         Intent intent = getIntent();
         markerId = intent.getIntExtra("MARKER_ID", 0);
-        Button returnBtn = findViewById(R.id.returnBtn);
+        ImageButton returnBtn = findViewById(R.id.returnBtn);
         returnBtn.setOnClickListener(new moveDetailPage());
         new CommentPage.showComment(this,markerId).execute();
     }
