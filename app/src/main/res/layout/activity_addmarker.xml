@@ -115,6 +115,7 @@
         android:id="@+id/createBtn"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="マーカーを作成"
+        android:textSize="20dp"
+        android:text="投稿する"
         android:background="@drawable/dark_button"/>
 </LinearLayout>
