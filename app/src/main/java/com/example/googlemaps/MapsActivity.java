@@ -5,6 +5,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import android.annotation.SuppressLint;
+import android.database.CursorWindow;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.googlemaps.databinding.ActivityMapsBinding;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Field field = null;
+        try {
+            field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        field.setAccessible(true);
+        try {
+            field.set(null, 1000 * 1024 * 1024);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         //地図用
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
