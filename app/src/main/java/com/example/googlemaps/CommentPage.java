@@ -103,6 +103,7 @@ public class CommentPage  extends AppCompatActivity {
     public void addCommentSetup(View v){
         EditText comment1 = (EditText)findViewById(R.id.comment1);
         String text = comment1.getText().toString();
+        if(text.equals("")){return;}
         comment1.setText("");
         Map<String,String> item = new HashMap<>();
         item.put("comment",text);

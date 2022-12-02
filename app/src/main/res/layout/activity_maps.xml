@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="20"
+            android:theme="@style/MyCheckBox"
             android:text="提案" />
 
         <CheckBox
@@ -26,6 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:theme="@style/MyCheckBox"
             android:text="注意" />
 
         <CheckBox
@@ -33,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="30"
+            android:theme="@style/MyCheckBox"
             android:text="緊急・危険" />
 
         <Button

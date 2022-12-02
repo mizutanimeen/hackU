@@ -103,6 +103,25 @@
         android:layout_marginHorizontal="20dp"
         android:textSize="20dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="いいね 5/10"
+        android:textSize="16dp"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="10dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:progressDrawable="@drawable/progress"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:max="100"
+        android:progress="40"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
