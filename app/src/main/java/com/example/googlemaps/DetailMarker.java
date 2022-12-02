@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,11 @@ public class DetailMarker extends AppCompatActivity {
 
     private ImageView imageView;
     private int markerId;
+    private int like;
+    private ProgressBar progressBar;
+    private TextView proText;
+    private int max;
+    private int level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +94,67 @@ public class DetailMarker extends AppCompatActivity {
             //text
             TextView text = findViewById(R.id.text);
             text.setText(markerData.getText());
+
+            //progressBar
+            level = 0;
+            like = markerData.getLike();
+            while(max <= like){
+                level++;
+                max = 5*level*level;
+            }
+            proText = findViewById(R.id.progressText);
+            proText.setText("いいね Lv"+level+": "+like+"/"+max);
+
+            progressBar = findViewById(R.id.progressBar);
+            progressBar.setMax(max);
+            progressBar.setProgress(like);
+        }
+    }
+
+    public void AddLikeOnClick(View v){
+        like++;
+        progressBar.setProgress(like);
+        new AddLike(this,markerId,like).execute();
+    }
+
+    private class AddLike extends AsyncTask<Void, Void, Integer> {
+        private WeakReference<Activity> weakActivity;
+        private AppDatabase db;
+        private int markerId;
+        private MarkerData markerData;
+        private int like;
+
+        public AddLike(Activity activity,int markerId,int like) {
+            this.db = AppDatabaseSingleton.getInstance(getApplicationContext());
+            weakActivity = new WeakReference<>(activity);
+            this.markerId = markerId;
+            this.like = like;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            MarkerDataDao markerDao = db.markerDataDao();
+            markerData = markerDao.getMarkerDataById(markerId);
+            markerData.setLike(like);
+            markerDao.updateMarker(markerData);
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            Activity activity = weakActivity.get();
+            if(activity == null) {
+                return;
+            }
+
+            like = markerData.getLike();
+            while(max <= like){
+                level++;
+                max = 5*level*level;
+            }
+            progressBar.setMax(max);
+            progressBar.setProgress(like);
+            proText.setText("いいね Lv"+level+": "+like+"/"+max);
         }
     }
 
@@ -114,8 +181,9 @@ public class DetailMarker extends AppCompatActivity {
     private class MoveMapsPage implements View.OnClickListener{
         @Override
         public void onClick(View view){
-            Intent intent = new Intent(getApplication(), MapsActivity.class);
-            startActivity(intent);
+            finish();
+//            Intent intent = new Intent(getApplication(), MapsActivity.class);
+//            startActivity(intent);
         }
     }
 }

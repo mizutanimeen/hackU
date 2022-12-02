@@ -18,6 +18,9 @@ public interface MarkerDataDao {
     @Query("SELECT id FROM markerdata WHERE latitude = :latitude and longitude = :longitude")
     int getMarkerIdByPosition(double latitude, double longitude);
 
+    @Query("SELECT * FROM markerdata ORDER BY `like` DESC")
+    List<MarkerData> getAllMarkerDataOrderLike();
+
     @Insert
     void markerInsert(MarkerData markerdata);
 

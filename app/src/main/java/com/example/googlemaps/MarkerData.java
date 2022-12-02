@@ -25,6 +25,8 @@ public class MarkerData {
     private String comment;
     private String imageBitmap;
 
+    public int like;
+
     public MarkerData(double latitude,double longitude,String title,String text,String tag,String createTime,String imageBitmap) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -34,6 +36,7 @@ public class MarkerData {
         this.createTime = createTime;
         this.comment = "";
         this.imageBitmap = imageBitmap;
+        this.like = 0;
     }
 
     public void setId(int id){this.id = id;}
@@ -58,4 +61,6 @@ public class MarkerData {
     public String getComment(){return comment;}
     public void setImageBitmap(String imageBitmap){this.imageBitmap = imageBitmap;}
     public String getImageBitmap(){return imageBitmap;}
+    public void setLike(int like){this.like = like;}
+    public int getLike(){return like;}
 }

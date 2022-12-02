@@ -196,8 +196,9 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
     private class MoveMapsPage implements View.OnClickListener{
         @Override
         public void onClick(View view){
-            Intent intent = new Intent(getApplication(), MapsActivity.class);
-            startActivity(intent);
+            finish();
+//            Intent intent = new Intent(getApplication(), MapsActivity.class);
+//            startActivity(intent);
         }
     }
 }

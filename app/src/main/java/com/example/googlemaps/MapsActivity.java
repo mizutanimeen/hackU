@@ -213,4 +213,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(getApplication(), AddMarker.class);
         startActivity(intent);
     }
+    public void moveLikePage(View v){
+        Intent intent = new Intent(getApplication(), Like.class);
+        startActivity(intent);
+    }
 }

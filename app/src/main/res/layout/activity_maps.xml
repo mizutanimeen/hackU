@@ -76,7 +76,8 @@
             android:layout_height="60dp"
             android:layout_weight="50"
             android:background="@drawable/button_background"
-            android:text="いいね一覧"
+            android:onClick="moveLikePage"
+            android:text="いいねランキング"
             android:textStyle="bold" />
     </LinearLayout>
 

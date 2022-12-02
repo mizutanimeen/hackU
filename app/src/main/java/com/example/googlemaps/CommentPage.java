@@ -154,9 +154,10 @@ public class CommentPage  extends AppCompatActivity {
     private class moveDetailPage implements View.OnClickListener{
         @Override
         public void onClick(View view){
-            Intent intent2 = new Intent(getApplication(), DetailMarker.class);
-            intent2.putExtra("MARKER_ID", markerId);
-            startActivity(intent2);
+            finish();
+//            Intent intent2 = new Intent(getApplication(), DetailMarker.class);
+//            intent2.putExtra("MARKER_ID", markerId);
+//            startActivity(intent2);
         }
     }
 }

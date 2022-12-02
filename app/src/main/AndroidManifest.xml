@@ -30,6 +30,7 @@
         <activity android:name=".AddMarker"/>
         <activity android:name=".DetailMarker" />
         <activity android:name=".CommentPage" />
+        <activity android:name=".Like" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
