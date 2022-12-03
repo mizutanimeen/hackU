@@ -73,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,15));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
-//        mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);
 
         //DBのマーカーを全部設置
         new SetAllMarker(this).execute();

@@ -60,7 +60,7 @@ public class AddMarker extends FragmentActivity implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start_location,15));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
-//        mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);
 
         AppDatabase db = AppDatabaseSingleton.getInstance(getApplicationContext());
         Button createBtn = findViewById(R.id.createBtn);
